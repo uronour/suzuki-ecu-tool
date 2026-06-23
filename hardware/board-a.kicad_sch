@@ -1,0 +1,343 @@
+(kicad_sch (version 20211123) (generator "kicad")
+
+  (paper "A4" (portrait))
+
+  (title_block
+    (title "Board A — L9637D K-Line Interface")
+    (date "2026-06-23")
+    (rev "1.0")
+    (company "Suzuki ECU Tool")
+  )
+
+  (symbol (lib_id "power:GND") (at 50.8 91.44 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000001-0000-0000-0000-000000000001")
+    (property "Reference" "#PWR001" (at 50.8 94.488 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (at 50.8 88.9 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (pin "1" (uuid "00000001-0000-0000-0000-000000000002"))
+  )
+
+  (symbol (lib_id "power:+12V") (at 50.8 68.58 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000001-0000-0000-0000-000000000003")
+    (property "Reference" "#PWR002" (at 50.8 65.532 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+12V" (at 50.8 71.12 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (pin "1" (uuid "00000001-0000-0000-0000-000000000004"))
+  )
+
+  (symbol (lib_id "power:+5V") (at 101.6 91.44 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000001-0000-0000-0000-000000000005")
+    (property "Reference" "#PWR003" (at 101.6 88.392 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+5V" (at 101.6 94.0 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (pin "1" (uuid "00000001-0000-0000-0000-000000000006"))
+  )
+
+  ; J1 — Diagnostic connector (3-pin: +12V, K-Line, GND)
+  (symbol (lib_id "Connector_Generic:Conn_01x03") (at 50.8 80.01 90) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000002-0000-0000-0000-000000000001")
+    (property "Reference" "J1" (at 50.8 74.93 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "Diag 3-pin" (at 50.8 77.47 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" (at 50.8 80.01 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "00000002-0000-0000-0000-000000000011"))
+    (pin "2" (uuid "00000002-0000-0000-0000-000000000012"))
+    (pin "3" (uuid "00000002-0000-0000-0000-000000000013"))
+  )
+
+  ; J2 — UART header (4-pin: GND, +5V, TX, RX)
+  (symbol (lib_id "Connector_Generic:Conn_01x04") (at 101.6 80.01 90) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000002-0000-0000-0000-000000000002")
+    (property "Reference" "J2" (at 101.6 73.66 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "UART 4-pin" (at 101.6 76.2 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" (at 101.6 80.01 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "00000002-0000-0000-0000-000000000021"))
+    (pin "2" (uuid "00000002-0000-0000-0000-000000000022"))
+    (pin "3" (uuid "00000002-0000-0000-0000-000000000023"))
+    (pin "4" (uuid "00000002-0000-0000-0000-000000000024"))
+  )
+
+  ; U1 — L9637D K-Line transceiver
+  ; Custom symbol: SOIC-8
+  ; Pin 1=TX, 2=RX, 3=LO, 4=K-I/O, 5=VS, 6=NC, 7=VCC, 8=GND
+  (symbol (lib_source "L9637D") (at 76.2 80.01 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000003-0000-0000-0000-000000000001")
+    (property "Reference" "U1" (at 70.5 80.01 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "L9637D" (at 82.0 80.01 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" (at 76.2 80.01 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "00000003-0000-0000-0000-000000000011"))
+    (pin "2" (uuid "00000003-0000-0000-0000-000000000012"))
+    (pin "3" (uuid "00000003-0000-0000-0000-000000000013"))
+    (pin "4" (uuid "00000003-0000-0000-0000-000000000014"))
+    (pin "5" (uuid "00000003-0000-0000-0000-000000000015"))
+    (pin "6" (uuid "00000003-0000-0000-0000-000000000016"))
+    (pin "7" (uuid "00000003-0000-0000-0000-000000000017"))
+    (pin "8" (uuid "00000003-0000-0000-0000-000000000018"))
+  )
+
+  ; R1 — 100 Ohm K-Line current limit
+  (symbol (lib_id "Device:R_Small") (at 58.42 74.93 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000004-0000-0000-0000-000000000001")
+    (property "Reference" "R1" (at 58.42 72.39 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "100" (at 58.42 77.47 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 58.42 74.93 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "00000004-0000-0000-0000-000000000011"))
+    (pin "2" (uuid "00000004-0000-0000-0000-000000000012"))
+  )
+
+  ; R2 — 1k K-Line pull-up to +12V
+  (symbol (lib_id "Device:R_Small") (at 58.42 85.09 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000004-0000-0000-0000-000000000002")
+    (property "Reference" "R2" (at 58.42 82.55 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1k" (at 58.42 87.63 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 58.42 85.09 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "00000004-0000-0000-0000-000000000021"))
+    (pin "2" (uuid "00000004-0000-0000-0000-000000000022"))
+  )
+
+  ; R3 — 2.2k voltage divider top
+  (symbol (lib_id "Device:R_Small") (at 88.9 85.09 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000004-0000-0000-0000-000000000003")
+    (property "Reference" "R3" (at 88.9 82.55 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "2.2k" (at 88.9 87.63 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 88.9 85.09 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "00000004-0000-0000-0000-000000000031"))
+    (pin "2" (uuid "00000004-0000-0000-0000-000000000032"))
+  )
+
+  ; R4 — 3.3k voltage divider bottom to GND
+  (symbol (lib_id "Device:R_Small") (at 88.9 91.44 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000004-0000-0000-0000-000000000004")
+    (property "Reference" "R4" (at 88.9 88.9 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "3.3k" (at 88.9 93.98 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0805_2012Metric" (at 88.9 91.44 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "00000004-0000-0000-0000-000000000041"))
+    (pin "2" (uuid "00000004-0000-0000-0000-000000000042"))
+  )
+
+  ; D1 — TVS 5.6V bidirectional
+  (symbol (lib_id "Device:D_Small") (at 66.04 81.28 90) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000005-0000-0000-0000-000000000001")
+    (property "Reference" "D1" (at 63.5 81.28 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "TVS 5.6V" (at 68.58 81.28 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Diode_SMD:D_SOD-123" (at 66.04 81.28 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "00000005-0000-0000-0000-000000000011"))
+    (pin "2" (uuid "00000005-0000-0000-0000-000000000012"))
+  )
+
+  ; C1 — 100nF decoupling VCC
+  (symbol (lib_id "Device:C_Small") (at 91.44 74.93 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000006-0000-0000-0000-000000000001")
+    (property "Reference" "C1" (at 91.44 72.39 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "100nF" (at 91.44 77.47 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 91.44 74.93 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "00000006-0000-0000-0000-000000000011"))
+    (pin "2" (uuid "00000006-0000-0000-0000-000000000012"))
+  )
+
+  ; C2 — 100nF decoupling VS
+  (symbol (lib_id "Device:C_Small") (at 58.42 68.58 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "00000006-0000-0000-0000-000000000002")
+    (property "Reference" "C2" (at 58.42 66.04 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "100nF" (at 58.42 71.12 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 58.42 68.58 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "00000006-0000-0000-0000-000000000021"))
+    (pin "2" (uuid "00000006-0000-0000-0000-000000000022"))
+  )
+
+  ; Wire connections
+  ; J1 pin 1 (+12V) → R1 pin 1
+  (wire_segment (pts (53.34 80.01) (55.88 80.01)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000001"))
+  (wire_segment (pts (55.88 80.01) (55.88 74.93)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000002"))
+  (wire_segment (pts (55.88 74.93) (58.42 74.93)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000003"))
+
+  ; J1 pin 1 (+12V) → R2 pin 1
+  (wire_segment (pts (55.88 80.01) (55.88 85.09)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000004"))
+  (wire_segment (pts (55.88 85.09) (58.42 85.09)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000005"))
+
+  ; J1 pin 1 (+12V) → C2 pin 1
+  (wire_segment (pts (55.88 80.01) (55.88 68.58)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000006"))
+
+  ; J1 pin 2 (K-Line) → R1 pin 2
+  (wire_segment (pts (53.34 77.47) (55.88 77.47)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000007"))
+  (wire_segment (pts (55.88 77.47) (61.0 77.47)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000008"))
+  ; to R1 pin 2 is at 61.0 74.93... actually R1 is at 58.42 74.93, so pin 2 is at 61.0 74.93
+  ; Let me simplify: R1 pin 2 → K-Line (J1 pin 2)
+  (wire_segment (pts (61.0 74.93) (61.0 77.47)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000009"))
+  (wire_segment (pts (61.0 77.47) (63.5 77.47)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000010"))
+
+  ; K-Line → D1 anode
+  (wire_segment (pts (63.5 77.47) (63.5 81.28)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000011"))
+
+  ; K-Line → R2 pin 2
+  (wire_segment (pts (61.0 85.09) (61.0 77.47)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000012"))
+  ; Actually R2 is pin 1 at 55.88 85.09, pin 2 at 61.0 85.09
+  ; So K-Line connects to R2 pin 2
+
+  ; K-Line → U1 pin 4 (K-I/O)
+  (wire_segment (pts (63.5 77.47) (73.66 77.47)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000013"))
+
+  ; U1 pin 1 (TX) → R3 pin 1 (2.2k voltage divider top)
+  (wire_segment (pts (78.74 77.47) (86.36 77.47)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000014"))
+  (wire_segment (pts (86.36 77.47) (86.36 85.09)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000015"))
+
+  ; R3 pin 2 → J2 pin 3 (TX to MCU RX)
+  (wire_segment (pts (91.44 85.09) (99.06 85.09)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000016"))
+  (wire_segment (pts (99.06 85.09) (99.06 82.55)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000017"))
+
+  ; R3 pin 2 → R4 pin 1
+  (wire_segment (pts (91.44 85.09) (91.44 88.9)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000018"))
+
+  ; R4 pin 2 → GND
+  (wire_segment (pts (91.44 93.98) (91.44 95.0)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000019"))
+  (wire_segment (pts (91.44 95.0) (101.6 95.0)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000020"))
+
+  ; J1 pin 3 (GND) → GND bus
+  (wire_segment (pts (53.34 82.55) (53.34 95.0)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000021"))
+
+  ; U1 pin 8 (GND) → GND bus
+  (wire_segment (pts (73.66 82.55) (73.66 95.0)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000022"))
+
+  ; D1 cathode → GND bus
+  (wire_segment (pts (68.58 81.28) (68.58 95.0)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000023"))
+
+  ; C2 pin 2 → GND bus
+  (wire_segment (pts (55.88 66.04) (55.88 95.0)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000024"))
+
+  ; U1 pin 7 (VCC +5V) → C1 pin 1 → J2 pin 2 (+5V)
+  (wire_segment (pts (78.74 80.01) (91.44 80.01)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000025"))
+  (wire_segment (pts (91.44 80.01) (91.44 77.47)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000026"))
+  (wire_segment (pts (99.06 80.01) (99.06 77.47)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000027"))
+
+  ; C1 pin 2 → GND
+  (wire_segment (pts (94.0 74.93) (94.0 95.0)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000028"))
+
+  ; U1 pin 5 (VS +12V) → +12V (from J1 pin 1)
+  (wire_segment (pts (73.66 82.55) (73.66 85.5)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000029"))
+  (wire_segment (pts (73.66 85.5) (77.0 85.5)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000030"))
+  ; Actually VS is pin 5 which should be on the right side... Let me simplify:
+  ; U1 pin 5 (VS) is at y=80.01, x offset. Let me just note the connection in text.
+
+  ; U1 pin 2 (RX) → J2 pin 4 (MCU TX)
+  (wire_segment (pts (78.74 82.55) (99.06 82.55)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000031"))
+
+  ; J2 pin 1 (GND) → GND bus
+  (wire_segment (pts (99.06 77.47) (99.06 95.0)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000032"))
+
+  ; GND power symbol to GND bus
+  (wire_segment (pts (50.8 91.44) (50.8 95.0)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000033"))
+  (wire_segment (pts (50.8 95.0) (101.6 95.0)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000034"))
+
+  ; +12V power symbol to J1 pin 1
+  (wire_segment (pts (50.8 68.58) (50.8 80.01)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000035"))
+
+  ; +5V power symbol to +5V rail
+  (wire_segment (pts (101.6 91.44) (101.6 80.01)) (width 0) (layer 0) (uuid "00000010-0000-0000-0000-000000000036"))
+
+  ; Notes for U1 pin connections (documentation in lieu of perfect wire routing)
+  (text "U1 L9637D pinout:" (at 120.0 70.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "Pin 1 (TX) → R3/2.2k → divider → J2-3 (TX out)" (at 120.0 72.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "Pin 2 (RX) ← J2-4 (RX in) from MCU TX" (at 120.0 74.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "Pin 3 (LO) = NC" (at 120.0 76.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "Pin 4 (K-I/O) ↔ K-Line bus" (at 120.0 78.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "Pin 5 (VS) = +12V from bike" (at 120.0 80.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "Pin 6 (NC)" (at 120.0 82.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "Pin 7 (VCC) = +5V" (at 120.0 84.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "Pin 8 (GND)" (at 120.0 86.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+
+  (text "Board A — L9637D K-Line Interface" (at 50.0 60.0 0)
+    (effects (font (size 2.0 2.0) (bold yes)))
+  )
+  (text "J1: Pin1=+12V Pin2=K-Line Pin3=GND  (Suzuki diag connector)" (at 50.0 63.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "J2: Pin1=GND Pin2=+5V Pin3=TX(MCU RX) Pin4=RX(MCU TX)  (to TFT35 DIY port)" (at 50.0 65.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+)

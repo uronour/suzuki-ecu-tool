@@ -6,6 +6,7 @@
 #include "SDSProtocol.h"
 #include "kline_task.h"
 #include "bt_stream.h"
+#include "sd_log.h"
 #include "font_8x13.h"
 #include "os_timer.h"
 
@@ -31,6 +32,7 @@ static GaugePage g_currentPage = GAUGE_PAGE_DASHBOARD;
 static uint32_t g_lastUpdate = 0;
 static uint32_t g_prevNeedleVal = 0xFFFFFFFF;
 static uint32_t g_prevDig[4] = {0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF};
+static uint8_t g_detailMode = 0;
 
 static GaugeDial g_tach = {
   .cx = TACH_CX, .cy = TACH_CY,
@@ -118,6 +120,25 @@ void Gauge_Update(void)
           DigValueU32(i, dig[i], units[i], COLOR_WHITE);
         }
       }
+
+      if (g_detailMode)
+      {
+        char buf[16];
+        snprintf(buf, sizeof(buf), "%u kPa", g_sdsData.mapKpa);
+        GFX_DrawStringScaled(80, 165, buf, COLOR_WHITE, RGB565(20, 20, 20), 1);
+        snprintf(buf, sizeof(buf), "%u C", g_sdsData.intakeAirTemp);
+        GFX_DrawStringScaled(80, 185, buf, COLOR_WHITE, RGB565(20, 20, 20), 1);
+        snprintf(buf, sizeof(buf), "%u%%", g_sdsData.throttlePos);
+        GFX_DrawStringScaled(80, 205, buf, COLOR_WHITE, RGB565(20, 20, 20), 1);
+        snprintf(buf, sizeof(buf), "%u", g_sdsData.o2Sensor);
+        GFX_DrawStringScaled(80, 225, buf, COLOR_WHITE, RGB565(20, 20, 20), 1);
+        snprintf(buf, sizeof(buf), "%u ms", g_sdsData.injectorPulse);
+        GFX_DrawStringScaled(80, 245, buf, COLOR_WHITE, RGB565(20, 20, 20), 1);
+        snprintf(buf, sizeof(buf), "%u deg", g_sdsData.ignitionTiming);
+        GFX_DrawStringScaled(80, 265, buf, COLOR_WHITE, RGB565(20, 20, 20), 1);
+        snprintf(buf, sizeof(buf), "%u", g_sdsData.iacStep);
+        GFX_DrawStringScaled(80, 285, buf, COLOR_WHITE, RGB565(20, 20, 20), 1);
+      }
       break;
     }
 
@@ -161,8 +182,10 @@ void Gauge_Update(void)
       DigValue(0, KLine_IsConnected() ? "OK" : "NC", KLine_IsConnected() ? COLOR_GREEN : COLOR_RED);
       GFX_DrawStringScaled(30, 80 + DIG_STEP, "BT:", COLOR_GRAY, RGB565(30, 30, 30), 2);
       DigValue(1, BT_IsConnected() ? "OK" : "NC", BT_IsConnected() ? COLOR_GREEN : COLOR_RED);
-      GFX_DrawStringScaled(30, 80 + DIG_STEP * 2, "Dealer", COLOR_GRAY, RGB565(30, 30, 30), 2);
-      GFX_DrawStringScaled(30, 80 + DIG_STEP * 3, "Log", COLOR_GRAY, RGB565(30, 30, 30), 2);
+      GFX_DrawStringScaled(30, 80 + DIG_STEP * 2, "SD:", COLOR_GRAY, RGB565(30, 30, 30), 2);
+      DigValue(2, SD_Log_IsMounted() ? "OK" : "NC", SD_Log_IsMounted() ? COLOR_GREEN : COLOR_RED);
+      GFX_DrawStringScaled(30, 80 + DIG_STEP * 3, "Log:", COLOR_GRAY, RGB565(30, 30, 30), 2);
+      DigValue(3, SD_Log_IsActive() ? "ON" : "OFF", SD_Log_IsActive() ? COLOR_GREEN : COLOR_GRAY);
       break;
     }
   }
@@ -187,11 +210,38 @@ void Gauge_SetPage(GaugePage page)
 
 GaugePage Gauge_GetPage(void) { return g_currentPage; }
 
+void Gauge_Press(void)
+{
+  if (g_currentPage == GAUGE_PAGE_DASHBOARD)
+  {
+    g_detailMode = !g_detailMode;
+    if (g_detailMode)
+    {
+      LCD_FillRect(10, 160, 290, 310, RGB565(20, 20, 20));
+      GFX_DrawStringScaled(15, 165, "MAP", RGB565(100, 100, 100), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(15, 185, "IAT", RGB565(100, 100, 100), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(15, 205, "TPS", RGB565(100, 100, 100), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(15, 225, "O2", RGB565(100, 100, 100), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(15, 245, "Inject", RGB565(100, 100, 100), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(15, 265, "Ign", RGB565(100, 100, 100), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(15, 285, "IAC", RGB565(100, 100, 100), RGB565(20, 20, 20), 1);
+    }
+  }
+  else if (g_currentPage == GAUGE_PAGE_SETTINGS)
+  {
+    if (SD_Log_IsActive())
+      SD_Log_Stop();
+    else
+      SD_Log_Start();
+  }
+}
+
 void Gauge_NextPage(void)
 {
   g_currentPage = (g_currentPage + 1) % GAUGE_PAGE_COUNT;
   g_prevNeedleVal = 0xFFFFFFFF;
   for (int i = 0; i < 4; i++) g_prevDig[i] = 0xFFFFFFFF;
+  g_detailMode = 0;
   LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1, RGB565(30, 30, 30));
   if (g_currentPage == GAUGE_PAGE_DASHBOARD) DrawTachoFace();
 }
@@ -201,6 +251,7 @@ void Gauge_PrevPage(void)
   g_currentPage = (g_currentPage == 0) ? (GAUGE_PAGE_COUNT - 1) : (g_currentPage - 1);
   g_prevNeedleVal = 0xFFFFFFFF;
   for (int i = 0; i < 4; i++) g_prevDig[i] = 0xFFFFFFFF;
+  g_detailMode = 0;
   LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1, RGB565(30, 30, 30));
   if (g_currentPage == GAUGE_PAGE_DASHBOARD) DrawTachoFace();
 }

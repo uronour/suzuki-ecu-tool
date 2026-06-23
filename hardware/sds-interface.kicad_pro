@@ -1,0 +1,55 @@
+{
+  "board": {
+    "design_settings": {
+      "defaults": {
+        "track_width": 0.254,
+        "via_dia": 0.6,
+        "via_drill": 0.3
+      },
+      "layer_presets": []
+    },
+    "modification_date": "2026-06-23T01:00:00+0000",
+    "sheets": [
+      {
+        "file": "board-a.kicad_sch",
+        "name": "Board A — L9637D K-Line"
+      },
+      {
+        "file": "board-b.kicad_sch",
+        "name": "Board B — HC-05 Bluetooth"
+      }
+    ]
+  },
+  "meta": {
+    "version": 1
+  },
+  "project": {
+    "name": "sds-interface",
+    "title": "Suzuki SDS ECU Diagnostic Interface",
+    "company": "",
+    "revision": "1.0",
+    "date": "2026-06-23"
+  },
+  "schematic": {
+    "annotate": true,
+    "check_annotate": false,
+    "drawing": {
+      "default_line_width": 0.254
+    },
+    "erc": {
+      "check_erc": false,
+      "erc_warnings": []
+    },
+    "netlist": {
+      "format": "pcbnew"
+    },
+    "plot": {
+      "format": "pdf"
+    }
+  },
+  "pcbnew": {
+    "last_paths": {
+      "netlist": ""
+    }
+  }
+}

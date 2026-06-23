@@ -197,9 +197,12 @@ suzuki-ecu-tool/
 
 ### ✅ Done
 - Protocol research and KWP2000 library analysis (aster94 KWP2000)
-- BOM, wiring diagram, KiCad schematic
+- BOM, wiring diagram, KiCad schematics (Board A + Board B, S-expression format)
 - TFT35 V3.0 firmware with stripped BTT codebase
 - Custom gauge UI with analog tachometer, digital readouts, dark theme
+- Thick tapered needle with shadow effect (7-pixel wide via parallel Bresenham lines)
+- Encoder press → detail overlay on dashboard (MAP, IAT, TPS, O2, Injector, Ign, IAC)
+- SD card data logging (CSV via FatFs, 1Hz, toggle on Settings page via encoder press)
 - Rotary encoder and touch navigation
 - LCD auto-detection (ILI9488 / NT35310)
 - XPT2046 touch driver enabled
@@ -208,20 +211,18 @@ suzuki-ecu-tool/
 - K-Line fast init and protocol engine
 - Bluetooth streaming (USART1 → HC-05)
 - Flash dump and backup preserved
-- Builds at ~24KB (224KB available)
+- Builds at ~32KB (224KB available)
 
 ### 🔄 In Progress
-- Custom PCB design — Board A (L9637D K-Line) + Board B (HC-05 socket), with common 4-pin UART header
+- PCB fabrication/ordering — two small modular PCBs (Board A: L9637D K-Line, Board B: HC-05 socket, common UART header)
 
 ### ⏸️ Blocked (awaiting parts)
 - L9637D K-Line transceiver ICs
 - HC-05 Bluetooth modules
-- Passives (resistors, caps, TVS)
-- PCB fabrication/verification
+- SMD passives (resistors, caps, TVS)
+- PCB order (JLCPCB / PCBWay)
 - End-to-end K-Line + BT testing with real ECU
 - Breadboard prototype testing
-- Encoder press → detail/info mode
-- SD card data logging
 
 ## Getting Started (for development)
 

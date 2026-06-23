@@ -55,7 +55,7 @@ static void Encoder_Handle(void)
 
   if (Encoder_GetPress())
   {
-    Gauge_NextPage();
+    Gauge_Press();
   }
 }
 
@@ -77,6 +77,7 @@ int main(void)
 
   Gauge_Init();
   BT_Init();
+  SD_Log_Init();
 
   SDS_Init();
 
@@ -87,6 +88,7 @@ int main(void)
     SDS_PollSensorData();
     Gauge_Update();
     BT_Stream();
+    SD_Log_Tick();
     Touch_Handle();
     Encoder_Handle();
 

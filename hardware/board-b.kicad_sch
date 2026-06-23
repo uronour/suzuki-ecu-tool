@@ -1,0 +1,139 @@
+(kicad_sch (version 20211123) (generator "kicad")
+
+  (paper "A4" (portrait))
+
+  (title_block
+    (title "Board B — HC-05 Bluetooth Socket")
+    (date "2026-06-23")
+    (rev "1.0")
+    (company "Suzuki ECU Tool")
+  )
+
+  (symbol (lib_id "power:GND") (at 50.8 91.44 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "20000001-0000-0000-0000-000000000001")
+    (property "Reference" "#PWR001" (at 50.8 94.488 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "GND" (at 50.8 88.9 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (pin "1" (uuid "20000001-0000-0000-0000-000000000002"))
+  )
+
+  (symbol (lib_id "power:+5V") (at 101.6 91.44 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "20000001-0000-0000-0000-000000000003")
+    (property "Reference" "#PWR002" (at 101.6 88.392 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "+5V" (at 101.6 94.0 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (pin "1" (uuid "20000001-0000-0000-0000-000000000004"))
+  )
+
+  ; J1 — UART header (4-pin: GND, +5V, TX, RX) — matches Board A pinout
+  (symbol (lib_id "Connector_Generic:Conn_01x04") (at 76.2 80.01 90) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "20000002-0000-0000-0000-000000000001")
+    (property "Reference" "J1" (at 76.2 73.66 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "UART 4-pin (to TFT35 WiFi)" (at 76.2 76.2 90)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" (at 76.2 80.01 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "20000002-0000-0000-0000-000000000011"))
+    (pin "2" (uuid "20000002-0000-0000-0000-000000000012"))
+    (pin "3" (uuid "20000002-0000-0000-0000-000000000013"))
+    (pin "4" (uuid "20000002-0000-0000-0000-000000000014"))
+  )
+
+  ; J2 — HC-05 socket (4-pin female header)
+  ; HC-05 pinout: 1=KEY, 2=VCC, 3=TX, 4=RX, 5=NC, 6=NC
+  ; We only connect pins 2(VCC), 3(TX), 4(RX) and use pin 1 KEY + GND
+  (symbol (lib_id "Connector_Generic:Conn_01x06") (at 76.2 91.44 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "20000002-0000-0000-0000-000000000002")
+    (property "Reference" "J2" (at 69.0 88.9 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "HC-05 Socket" (at 69.0 93.98 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical" (at 76.2 91.44 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "20000002-0000-0000-0000-000000000021"))
+    (pin "2" (uuid "20000002-0000-0000-0000-000000000022"))
+    (pin "3" (uuid "20000002-0000-0000-0000-000000000023"))
+    (pin "4" (uuid "20000002-0000-0000-0000-000000000024"))
+    (pin "5" (uuid "20000002-0000-0000-0000-000000000025"))
+    (pin "6" (uuid "20000002-0000-0000-0000-000000000026"))
+  )
+
+  ; C1 — 100nF decoupling
+  (symbol (lib_id "Device:C_Small") (at 91.44 74.93 0) (unit 1)
+    (in_bom yes) (on_board yes) (uuid "20000006-0000-0000-0000-000000000001")
+    (property "Reference" "C1" (at 91.44 72.39 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "100nF" (at 91.44 77.47 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Capacitor_SMD:C_0805_2012Metric" (at 91.44 74.93 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid "20000006-0000-0000-0000-000000000011"))
+    (pin "2" (uuid "20000006-0000-0000-0000-000000000012"))
+  )
+
+  ; Wire connections
+  ; J1 pin 1 (GND) → GND bus
+  (wire_segment (pts (73.66 77.47) (73.66 95.0)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000001"))
+
+  ; J1 pin 2 (+5V) → J2 pin 2 (HC-05 VCC) → C1 pin 1
+  (wire_segment (pts (73.66 80.01) (73.66 74.93)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000002"))
+  (wire_segment (pts (73.66 74.93) (91.44 74.93)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000003"))
+  (wire_segment (pts (73.66 82.55) (73.66 91.44)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000004"))
+
+  ; J1 pin 3 (TX from MCU) → J2 pin 4 (HC-05 RX)
+  (wire_segment (pts (78.74 82.55) (78.74 94.0)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000005"))
+
+  ; J1 pin 4 (RX to MCU) → J2 pin 3 (HC-05 TX)
+  (wire_segment (pts (78.74 85.09) (76.2 85.09)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000006"))
+  (wire_segment (pts (76.2 85.09) (76.2 93.98)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000007"))
+
+  ; C1 pin 2 → GND
+  (wire_segment (pts (94.0 74.93) (94.0 95.0)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000008"))
+
+  ; J2 pin 1 (KEY) → NC (leave floating)
+  ; J2 pins 5,6 → NC
+
+  ; GND bus
+  (wire_segment (pts (50.8 91.44) (50.8 95.0)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000009"))
+  (wire_segment (pts (50.8 95.0) (101.6 95.0)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000010"))
+
+  ; +5V power symbol to +5V rail
+  (wire_segment (pts (101.6 91.44) (101.6 80.01)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000011"))
+  (wire_segment (pts (101.6 80.01) (73.66 80.01)) (width 0) (layer 0) (uuid "20000010-0000-0000-0000-000000000012"))
+
+  ; J2 pin 5 (NC)
+  (no_connect (at 81.28 96.52) (uuid "20000010-0000-0000-0000-000000000013"))
+  (no_connect (at 83.82 96.52) (uuid "20000010-0000-0000-0000-000000000014"))
+
+  (text "Board B — HC-05 Bluetooth Socket" (at 50.0 60.0 0)
+    (effects (font (size 2.0 2.0) (bold yes)))
+  )
+  (text "J1: Pin1=GND Pin2=+5V Pin3=TX(MCU→BT) Pin4=RX(MCU←BT)  (to TFT35 WiFi port)" (at 50.0 63.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "J2 (HC-05 socket): Pin1=KEY(NC) Pin2=VCC Pin3=TX Pin4=RX Pin5=NC Pin6=NC" (at 50.0 65.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "HC-05 is 3.3V — connects directly, no level shifting needed" (at 50.0 67.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+  (text "NOTE: J1 pinout is IDENTICAL to Board A J2 — boards are interchangeable" (at 50.0 69.0 0)
+    (effects (font (size 1.27 1.27)))
+  )
+)

@@ -23,6 +23,7 @@ void Gauge_SetPage(GaugePage page);
 GaugePage Gauge_GetPage(void);
 void Gauge_NextPage(void);
 void Gauge_PrevPage(void);
+void Gauge_Press(void);
 
 #ifdef __cplusplus
 }

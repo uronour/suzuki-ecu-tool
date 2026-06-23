@@ -27,7 +27,7 @@
 /   2: f_opendir(), f_readdir() and f_closedir() are removed in addition to 1.
 /   3: f_lseek() function is removed in addition to 2. */
 
-#define FF_USE_STRFUNC  0
+#define FF_USE_STRFUNC  2
 /* This option switches string functions, f_gets(), f_putc(), f_puts() and f_printf().
 /
 /  0: Disable string functions.
@@ -91,7 +91,7 @@
 /     0 - Include all code pages above and configured by f_setcp()
 */
 
-#define FF_USE_LFN      3
+#define FF_USE_LFN      0
 #define FF_MAX_LFN      255
 /* The FF_USE_LFN switches the support for LFN (long file name).
 /
