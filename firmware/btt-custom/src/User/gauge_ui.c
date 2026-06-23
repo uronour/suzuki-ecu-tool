@@ -69,6 +69,7 @@ static void DrawTachoFace(void)
   DIAL_DrawArcSweep(&g_tach, DIAL_AngleForValue(&g_tach, TACH_REDLINE), TACH_END, RGB565(200, 0, 0));
   DIAL_DrawTicks(&g_tach, 500, 2000, RGB565(180, 180, 180), RGB565(220, 220, 220));
   DIAL_DrawCenterHub(&g_tach, 12, RGB565(80, 80, 80));
+  GFX_DrawStringScaled(g_tach.cx - 36, g_tach.cy - 9, "GSX-R", RGB565(255, 40, 0), RGB565(30, 30, 30), 2);
 }
 
 void Gauge_Init(void)
@@ -188,6 +189,28 @@ void Gauge_Update(void)
       DigValue(3, SD_Log_IsActive() ? "ON" : "OFF", SD_Log_IsActive() ? COLOR_GREEN : COLOR_GRAY);
       break;
     }
+
+    case GAUGE_PAGE_ABOUT:
+    {
+      LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 21, RGB565(20, 20, 20));
+      GFX_DrawStringScaled(60, 40, "Suzuki ECU Tool", RGB565(0, 180, 255), RGB565(20, 20, 20), 3);
+      GFX_DrawStringScaled(80, 85, "2004 GSX-R1000", RGB565(180, 180, 180), RGB565(20, 20, 20), 2);
+
+      GFX_DrawStringScaled(40, 130, "Version :", RGB565(100, 100, 100), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(160, 130, "1.x", RGB565(200, 200, 200), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(40, 150, "Date    :", RGB565(100, 100, 100), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(160, 150, __DATE__, RGB565(200, 200, 200), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(40, 170, "Maker   :", RGB565(100, 100, 100), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(160, 170, "Uronour", RGB565(200, 200, 200), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(40, 190, "AI      :", RGB565(100, 100, 100), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(160, 190, "OpenCode (claude-sonnet)", RGB565(200, 200, 200), RGB565(20, 20, 20), 1);
+
+      GFX_DrawStringScaled(40, 220, "github.com/uronour/", RGB565(80, 80, 80), RGB565(20, 20, 20), 1);
+      GFX_DrawStringScaled(40, 240, "suzuki-ecu-tool", RGB565(80, 80, 80), RGB565(20, 20, 20), 1);
+
+      GFX_DrawStringScaled(40, 270, "GPL-3.0", RGB565(60, 60, 60), RGB565(20, 20, 20), 1);
+      break;
+    }
   }
 
   char pageStr[8];
@@ -202,8 +225,16 @@ void Gauge_SetPage(GaugePage page)
     g_currentPage = page;
     g_prevNeedleVal = 0xFFFFFFFF;
     for (int i = 0; i < 4; i++) g_prevDig[i] = 0xFFFFFFFF;
-    LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1, RGB565(30, 30, 30));
-    if (page == GAUGE_PAGE_DASHBOARD) DrawTachoFace();
+    g_detailMode = 0;
+    if (page == GAUGE_PAGE_DASHBOARD)
+    {
+      LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1, RGB565(30, 30, 30));
+      DrawTachoFace();
+    }
+    else
+    {
+      LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 21, RGB565(30, 30, 30));
+    }
     Gauge_Update();
   }
 }
@@ -242,8 +273,16 @@ void Gauge_NextPage(void)
   g_prevNeedleVal = 0xFFFFFFFF;
   for (int i = 0; i < 4; i++) g_prevDig[i] = 0xFFFFFFFF;
   g_detailMode = 0;
-  LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1, RGB565(30, 30, 30));
-  if (g_currentPage == GAUGE_PAGE_DASHBOARD) DrawTachoFace();
+  if (g_currentPage == GAUGE_PAGE_DASHBOARD)
+  {
+    LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1, RGB565(30, 30, 30));
+    DrawTachoFace();
+  }
+  else
+  {
+    LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 21, RGB565(30, 30, 30));
+  }
+  Gauge_Update();
 }
 
 void Gauge_PrevPage(void)
@@ -252,6 +291,14 @@ void Gauge_PrevPage(void)
   g_prevNeedleVal = 0xFFFFFFFF;
   for (int i = 0; i < 4; i++) g_prevDig[i] = 0xFFFFFFFF;
   g_detailMode = 0;
-  LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1, RGB565(30, 30, 30));
-  if (g_currentPage == GAUGE_PAGE_DASHBOARD) DrawTachoFace();
+  if (g_currentPage == GAUGE_PAGE_DASHBOARD)
+  {
+    LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1, RGB565(30, 30, 30));
+    DrawTachoFace();
+  }
+  else
+  {
+    LCD_Fill(0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 21, RGB565(30, 30, 30));
+  }
+  Gauge_Update();
 }

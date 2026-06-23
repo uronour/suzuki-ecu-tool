@@ -8,13 +8,14 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
-#define GAUGE_PAGE_COUNT 4
+#define GAUGE_PAGE_COUNT 5
 
 typedef enum {
   GAUGE_PAGE_DASHBOARD = 0,
   GAUGE_PAGE_SENSORS,
   GAUGE_PAGE_DTC,
   GAUGE_PAGE_SETTINGS,
+  GAUGE_PAGE_ABOUT,
 } GaugePage;
 
 void Gauge_Init(void);
