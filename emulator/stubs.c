@@ -36,7 +36,7 @@ void OS_InitTimerMs(void)
 static uint8_t g_connected = 0;
 static uint8_t g_sdMounted = 1;
 static uint8_t g_sdLogging = 0;
-static uint8_t g_btConnected = 1;
+uint8_t g_btConnected = 1;
 
 void SDS_Init(void)
 {
@@ -109,4 +109,10 @@ void SD_Log_Start(void)
 void SD_Log_Stop(void)
 {
     g_sdLogging = 0;
+}
+
+bool SD_Log_SaveBin(const char *filename, const uint8_t *data, uint32_t len)
+{
+    (void)filename; (void)data; (void)len;
+    return true; // simulated success
 }

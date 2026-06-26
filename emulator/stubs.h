@@ -27,5 +27,6 @@ bool SD_Log_IsMounted(void);
 bool SD_Log_IsActive(void);
 void SD_Log_Start(void);
 void SD_Log_Stop(void);
+bool SD_Log_SaveBin(const char *filename, const uint8_t *data, uint32_t len);
 
 #endif

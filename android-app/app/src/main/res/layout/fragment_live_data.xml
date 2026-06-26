@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:padding="16dp">
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/rpm" />
+        <TextView android:id="@+id/rpmValue" style="@style/LiveDataValue" android:text="0 rpm" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/speed" />
+        <TextView android:id="@+id/speedValue" style="@style/LiveDataValue" android:text="0.0 km/h" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/coolant_temp" />
+        <TextView android:id="@+id/coolantValue" style="@style/LiveDataValue" android:text="0 °C" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/intake_temp" />
+        <TextView android:id="@+id/intakeTempValue" style="@style/LiveDataValue" android:text="0 °C" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/throttle_pos" />
+        <TextView android:id="@+id/tpsValue" style="@style/LiveDataValue" android:text="0 %" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/battery_voltage" />
+        <TextView android:id="@+id/batteryValue" style="@style/LiveDataValue" android:text="0.0 V" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/gear_position" />
+        <TextView android:id="@+id/gearValue" style="@style/LiveDataValue" android:text="N" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/map_pressure" />
+        <TextView android:id="@+id/mapValue" style="@style/LiveDataValue" android:text="0 kPa" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/o2_sensor" />
+        <TextView android:id="@+id/o2Value" style="@style/LiveDataValue" android:text="0 mV" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/throttle_pos_sensor" />
+        <TextView android:id="@+id/stpsValue" style="@style/LiveDataValue" android:text="0 %" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/injector_pulse" />
+        <TextView android:id="@+id/injValue" style="@style/LiveDataValue" android:text="0.0 ms" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/ignition_timing" />
+        <TextView android:id="@+id/ignValue" style="@style/LiveDataValue" android:text="0 °" />
+
+        <TextView style="@style/LiveDataLabel" android:text="@string/iac_steps" />
+        <TextView android:id="@+id/iacValue" style="@style/LiveDataValue" android:text="0" />
+
+        <TextView style="@style/LiveDataLabel" android:text="Barometric" />
+        <TextView android:id="@+id/baroValue" style="@style/LiveDataValue" android:text="0 kPa" />
+
+        <TextView style="@style/LiveDataLabel" android:text="Neutral" />
+        <TextView android:id="@+id/neutralValue" style="@style/LiveDataValue" android:text="No" />
+
+        <TextView
+            android:id="@+id/statusValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_columnSpan="2"
+            android:paddingTop="16dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp" />
+
+    </GridLayout>
+</ScrollView>

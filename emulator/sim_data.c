@@ -1,8 +1,12 @@
 #include "sim_data.h"
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
-SDSData g_sdsData = {0};
+SDSData    g_sdsData    = {0};
+SDSEcuInfo g_sdsEcuInfo = {0};
+uint8_t    g_klineConnected = 0;
+uint8_t    g_dealerMode     = 0;
 
 static uint32_t g_simTime = 0;
 static float g_idleRpm = 1200.0f;
@@ -33,6 +37,29 @@ void SimData_Init(void)
     g_sdsData.fanOn = 0;
     g_sdsData.sidestandDown = 1;
     g_sdsData.clutchIn = 0;
+
+    // Extended
+    g_sdsData.baroKpa = 101;
+    g_sdsData.injectorPW[0] = 25;
+    g_sdsData.injectorPW[1] = 24;
+    g_sdsData.injectorPW[2] = 26;
+    g_sdsData.injectorPW[3] = 25;
+    g_sdsData.pairValve = 0;
+    g_sdsData.neutral = 0;
+
+    // ECU info
+    g_sdsEcuInfo.ecuRawId[0] = 0x32901234;
+    g_sdsEcuInfo.ecuRawId[1] = 0x567890AB;
+    g_sdsEcuInfo.ecuRawId[2] = 0;
+    g_sdsEcuInfo.ecuRawId[3] = 0;
+    memcpy(g_sdsEcuInfo.vin, "JS1GT78A942123456\0", 18);
+    g_sdsEcuInfo.vinLen = 17;
+    g_sdsEcuInfo.flashSize = 524288;
+    g_sdsEcuInfo.calOffset = 0x8000;
+    g_sdsEcuInfo.calSize   = 0x18000;
+
+    g_klineConnected = 1;
+    g_dealerMode = 0;
 }
 
 void SimData_Update(void)
@@ -107,6 +134,7 @@ void SimData_Update(void)
     if (g_sdsData.o2Sensor < 100) g_sdsData.o2Sensor = 100;
 
     // Injector pulse width
+    g_sdsData.stps = (g_sdsData.throttlePos * 80 / 100) + (rand() % 10);
     g_sdsData.injectorPulse = 20 + (g_sdsData.throttlePos * 80 / 100) + (rand() % 10);
 
     // Ignition timing
@@ -122,6 +150,22 @@ void SimData_Update(void)
     if (g_simTime % 200 == 0) {
         g_sdsData.clutchIn = rand() % 2;
     }
+
+    // Barometric pressure - stable around 101kPa
+    g_sdsData.baroKpa = 100 + (rand() % 3);
+
+    // Individual injector pulse widths - follow single injector
+    uint32_t basePw = g_sdsData.injectorPulse;
+    g_sdsData.injectorPW[0] = basePw + (rand() % 4) - 2;
+    g_sdsData.injectorPW[1] = basePw + (rand() % 4) - 2;
+    g_sdsData.injectorPW[2] = basePw + (rand() % 4) - 2;
+    g_sdsData.injectorPW[3] = basePw + (rand() % 4) - 2;
+
+    // PAIR valve - open when warm
+    g_sdsData.pairValve = (g_sdsData.coolantTemp > 70) ? 1 : 0;
+
+    // Neutral - based on gear and clutch
+    g_sdsData.neutral = (g_currentGear == 0 || g_sdsData.clutchIn) ? 1 : 0;
 }
 
 void SimData_SetThrottle(uint8_t held)

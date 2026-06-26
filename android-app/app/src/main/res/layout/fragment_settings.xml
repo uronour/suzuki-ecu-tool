@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Connection -->
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Connection" android:textColor="@color/text_primary"
+            android:textSize="18sp" android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:hint="Host (IP Address)">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hostInput" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:inputType="text"
+                android:textColor="@color/text_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" android:hint="Port">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/portInput" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:inputType="number"
+                android:textColor="@color/text_primary" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:orientation="horizontal">
+            <Button android:id="@+id/btnConnect" style="@style/ToolButton"
+                android:layout_width="0dp" android:layout_weight="1"
+                android:text="Connect" android:layout_marginEnd="4dp" />
+            <Button android:id="@+id/btnDisconnect" style="@style/ToolButton"
+                android:layout_width="0dp" android:layout_weight="1"
+                android:text="Disconnect" android:enabled="false"
+                android:layout_marginStart="4dp" />
+        </LinearLayout>
+
+        <Button android:id="@+id/btnQuickConnect" style="@style/ToolButton"
+            android:layout_width="match_parent"
+            android:text="Quick Connect (192.168.1.200:8899)" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swAutoConnect" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="8dp"
+            android:text="Auto-connect on startup" />
+
+        <TextView android:id="@+id/settingsStatus" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="8dp"
+            android:textColor="@color/text_secondary" android:textSize="12sp" />
+
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:layout_marginVertical="16dp" android:background="@color/divider" />
+
+        <!-- Data -->
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Data" android:textColor="@color/text_primary"
+            android:textSize="18sp" android:textStyle="bold" />
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:gravity="center_vertical">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="Polling Interval"
+                android:textColor="@color/text_primary" android:textSize="16sp" />
+            <Spinner android:id="@+id/spinnerPollInterval"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:entries="@array/poll_intervals" />
+        </LinearLayout>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swKeepScreenOn" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="8dp"
+            android:text="Keep screen on while connected" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swUnitKmh" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Use km/h (off = mph)" />
+
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:layout_marginVertical="16dp" android:background="@color/divider" />
+
+        <!-- Theme -->
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Dashboard Theme" android:textColor="@color/text_primary"
+            android:textSize="18sp" android:textStyle="bold" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:orientation="horizontal">
+            <Button android:id="@+id/themeSport" style="@style/ToolButton"
+                android:text="Sport" android:backgroundTint="#DC1E1E" />
+            <Button android:id="@+id/themeClassic" style="@style/ToolButton"
+                android:text="Classic" android:backgroundTint="#C8AA64" />
+            <Button android:id="@+id/themeNight" style="@style/ToolButton"
+                android:text="Night" android:backgroundTint="#00B4FF" />
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:layout_marginVertical="16dp" android:background="@color/divider" />
+
+        <!-- Dashboard Gauges -->
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Gauges" android:textColor="@color/text_primary"
+            android:textSize="18sp" android:textStyle="bold" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swRpm" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="RPM Gauge" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swSpeedo" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Speedometer" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swGear" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Gear Display" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swLargeKm" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Large Speed Digits" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swFuel" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Fuel Gauge" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swOdo" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Odometer / Trip" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swClock" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Clock" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swPanel" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Info Panel (COOL, BAT, etc)" />
+
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:layout_marginVertical="16dp" android:background="@color/divider" />
+
+        <!-- Indicators -->
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Indicators" android:textColor="@color/text_primary"
+            android:textSize="18sp" android:textStyle="bold" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swNeutral" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Neutral Light" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swFan" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Fan Light" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swClutch" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Clutch Light" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swSidestand" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Sidestand Light" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swCheckEng" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Check Engine (MIL)" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swOil" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Oil Pressure Light" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swHiBeam" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="High Beam" />
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/swTurns" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Turn Signals" />
+
+    </LinearLayout>
+</ScrollView>

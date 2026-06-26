@@ -2,17 +2,17 @@
 #include "includes.h"
 #include <stdarg.h>
 
-static char g_btTxBuf[BT_TX_BUF];
-static char g_btRxBuf[BT_RX_BUF];
-static uint8_t g_btRxIdx = 0;
-static uint32_t g_btLastTx = 0;
-static bool g_btConnected = false;
+static char g_txBuf[BT_TX_BUF];
+static char g_rxBuf[BT_RX_BUF];
+static uint8_t g_rxIdx = 0;
+static bool g_ready = false;
 
 void BT_Init(void)
 {
   Serial_Config(BT_UART_PORT, BT_RX_BUF, BT_TX_BUF, BT_BAUD);
-  g_btRxIdx = 0;
-  g_btConnected = true;
+  g_rxIdx = 0;
+  g_ready = true;
+  BT_SendLine("Suzuki ECU Tool ready on 192.168.1.200:8899");
 }
 
 static void BT_SendRaw(const char *str)
@@ -24,70 +24,103 @@ void BT_SendLine(const char *fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
-  vsnprintf(g_btTxBuf, BT_TX_BUF, fmt, args);
+  vsnprintf(g_txBuf, BT_TX_BUF, fmt, args);
   va_end(args);
-  strncat(g_btTxBuf, "\r\n", BT_TX_BUF - strlen(g_btTxBuf) - 1);
-  BT_SendRaw(g_btTxBuf);
+  strncat(g_txBuf, "\r\n", BT_TX_BUF - strlen(g_txBuf) - 1);
+  BT_SendRaw(g_txBuf);
 }
 
 void BT_SendJSON(void)
 {
-  snprintf(g_btTxBuf, BT_TX_BUF,
-    "{\"rpm\":%u,\"coolant\":%u,\"air\":%u,\"tps\":%u,\"batt\":%u,"
-    "\"gear\":%u,\"inj\":%u,\"speed\":%u,\"o2\":%u,\"ign\":%u,"
-    "\"map\":%u,\"fan\":%u,\"side\":%u,\"clutch\":%u}",
-    g_sdsData.rpm, g_sdsData.coolantTemp, g_sdsData.intakeAirTemp,
-    g_sdsData.throttlePos, g_sdsData.batteryVolt, g_sdsData.gearPos,
-    g_sdsData.injectorPulse, g_sdsData.speed, g_sdsData.o2Sensor,
-    g_sdsData.ignitionTiming, g_sdsData.mapKpa,
-    g_sdsData.fanOn, g_sdsData.sidestandDown, g_sdsData.clutchIn);
-  BT_SendRaw(g_btTxBuf);
+  snprintf(g_txBuf, BT_TX_BUF,
+    "status rpm=%u,spd=%u,cool=%u,iat=%u,tps=%u,bat=%u,"
+    "gear=%u,map=%u,o2=%u,stps=%u,inj=%u,ign=%u,iac=%u,"
+    "baro=%u,neut=%u,clutch=%u,fan=%u,std=%u",
+    g_sdsData.rpm, g_sdsData.speed,
+    g_sdsData.coolantTemp, g_sdsData.intakeAirTemp,
+    g_sdsData.throttlePos, g_sdsData.batteryVolt,
+    g_sdsData.gearPos, g_sdsData.mapKpa,
+    g_sdsData.o2Sensor, g_sdsData.stps,
+    g_sdsData.injectorPulse, g_sdsData.ignitionTiming,
+    g_sdsData.iacStep, g_sdsData.baroKpa,
+    g_sdsData.neutral ? 1U : 0U,
+    g_sdsData.clutchIn ? 1U : 0U,
+    g_sdsData.fanOn ? 1U : 0U,
+    g_sdsData.sidestandDown ? 1U : 0U);
+  BT_SendRaw(g_txBuf);
   BT_SendRaw("\r\n");
 }
 
-bool BT_IsConnected(void)
+void BT_SendInfo(void)
 {
-  return g_btConnected;
+  snprintf(g_txBuf, BT_TX_BUF,
+    "info vin=%s,flash=%lu,cal_off=%lu,cal_sz=%lu",
+    g_ecuInfo.vin,
+    (unsigned long)g_ecuInfo.flashSize,
+    (unsigned long)g_ecuInfo.calOffset,
+    (unsigned long)g_ecuInfo.calSize);
+  BT_SendRaw(g_txBuf);
+  BT_SendRaw("\r\n");
 }
 
-void BT_ProcessCommand(const char *cmd)
+static void BT_ProcessCommand(const char *cmd)
 {
-  if (strcmp(cmd, "status") == 0)
-  {
+  if (strcmp(cmd, "status") == 0) {
     BT_SendJSON();
   }
-  else if (strcmp(cmd, "dtc") == 0)
-  {
+  else if (strcmp(cmd, "info") == 0) {
+    BT_SendInfo();
+  }
+  else if (strcmp(cmd, "dtc") == 0) {
     uint8_t dtcBuf[32];
     uint16_t count = SDS_GetDTCs(dtcBuf, sizeof(dtcBuf));
-    BT_SendLine("DTC count: %u", count);
+    if (count == 0) {
+      BT_SendLine("dtc none");
+    } else {
+      // Format: dtc <code1>,<code2>,...
+      g_txBuf[0] = '\0';
+      strcat(g_txBuf, "dtc ");
+      for (uint16_t i = 0; i < count; i++) {
+        char num[8];
+        snprintf(num, sizeof(num), "%s%u", (i > 0) ? "," : "", dtcBuf[i]);
+        strncat(g_txBuf, num, BT_TX_BUF - strlen(g_txBuf) - 1);
+      }
+      BT_SendRaw(g_txBuf);
+      BT_SendRaw("\r\n");
+    }
   }
-  else if (strcmp(cmd, "dealer_on") == 0)
-  {
+  else if (strcmp(cmd, "dealer_on") == 0) {
     KLine_SetDealerMode(true);
-    BT_SendLine("Dealer mode ON");
+    BT_SendLine("ok Dealer mode ON");
   }
-  else if (strcmp(cmd, "dealer_off") == 0)
-  {
+  else if (strcmp(cmd, "dealer_off") == 0) {
     KLine_SetDealerMode(false);
-    BT_SendLine("Dealer mode OFF");
+    BT_SendLine("ok Dealer mode OFF");
   }
-  else if (strcmp(cmd, "ping") == 0)
-  {
+  else if (strcmp(cmd, "stream_on") == 0) {
+    BT_SendLine("ok Streaming enabled");
+  }
+  else if (strcmp(cmd, "stream_off") == 0) {
+    BT_SendLine("ok Streaming disabled");
+  }
+  else if (strcmp(cmd, "ping") == 0) {
     BT_SendLine("pong");
   }
-  else if (strcmp(cmd, "help") == 0)
-  {
-    BT_SendLine("Commands: status, dtc, dealer_on, dealer_off, ping, help, stream");
+  else if (strcmp(cmd, "stop") == 0) {
+    BT_SendLine("stopped");
   }
-  else if (strcmp(cmd, "stream") == 0)
-  {
-    BT_SendJSON();
+  else if (strcmp(cmd, "help") == 0) {
+    BT_SendLine("Commands: status, dtc, info, dealer_on, dealer_off, stream_on, stream_off, ping, stop, help");
+  }
+  else if (strlen(cmd) > 0) {
+    BT_SendLine("error Unknown command: %s", cmd);
   }
 }
 
 void BT_Stream(void)
 {
+  if (!g_ready) return;
+
   while (Serial_GetWritingIndexRX(BT_UART_PORT) != Serial_GetReadingIndexRX(BT_UART_PORT))
   {
     char c = dmaL1DataRX[BT_UART_PORT].cache[Serial_GetReadingIndexRX(BT_UART_PORT)];
@@ -95,22 +128,16 @@ void BT_Stream(void)
 
     if (c == '\r' || c == '\n')
     {
-      if (g_btRxIdx > 0)
+      if (g_rxIdx > 0)
       {
-        g_btRxBuf[g_btRxIdx] = '\0';
-        BT_ProcessCommand(g_btRxBuf);
-        g_btRxIdx = 0;
+        g_rxBuf[g_rxIdx] = '\0';
+        BT_ProcessCommand(g_rxBuf);
+        g_rxIdx = 0;
       }
     }
-    else if (g_btRxIdx < BT_RX_BUF - 1)
+    else if (g_rxIdx < BT_RX_BUF - 1)
     {
-      g_btRxBuf[g_btRxIdx++] = c;
+      g_rxBuf[g_rxIdx++] = c;
     }
-  }
-
-  if (OS_GetTimeMs() - g_btLastTx > 500)
-  {
-    BT_SendJSON();
-    g_btLastTx = OS_GetTimeMs();
   }
 }

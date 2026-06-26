@@ -15,6 +15,10 @@ extern "C" {
   #define LCD_HEIGHT 320
 #endif
 
+// Runtime display dimensions (updated on rotation)
+extern uint16_t g_lcdWidth;
+extern uint16_t g_lcdHeight;
+
 #define RGB565(r,g,b) ((((r>>3)<<11) | ((g>>2)<<5) | (b>>3)))
 
 #define COLOR_BLACK   0x0000
@@ -36,6 +40,7 @@ void LCD_DrawVLine(uint16_t x, uint16_t y0, uint16_t y1, uint16_t color);
 void LCD_DrawRect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color);
 void LCD_FillRect(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color);
 void LCD_DrawProgressBar(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t pct, uint16_t barColor, uint16_t bgColor);
+void LCD_FillCircle(uint16_t x0, uint16_t y0, uint16_t r, uint16_t color);
 void LCD_Backlight_On(void);
 void LCD_SetBrightness(uint8_t pct);
 

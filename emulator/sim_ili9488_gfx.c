@@ -4,6 +4,9 @@
 #include "sdl_gfx.h"
 #include "font_8x13.h"
 
+uint16_t g_lcdWidth = LCD_WIDTH;
+uint16_t g_lcdHeight = LCD_HEIGHT;
+
 void LCD_Fill(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color)
 {
     SDL_GFX_FillRect(x0, y0, x1, y1, color);
@@ -70,7 +73,12 @@ void GFX_DrawString(int16_t x, int16_t y, const char *str, uint16_t color, uint1
 
 void GFX_DrawStringCenter(int16_t y, const char *str, uint16_t color, uint16_t bg)
 {
-    SDL_GFX_DrawStringCenter(y, str, color, bg);
+    int16_t len = 0;
+    const char *p = str;
+    while (*p++) len++;
+    int16_t x = (g_lcdWidth - len * FONT_STEP) / 2;
+    if (x < 0) x = 0;
+    GFX_DrawString(x, y, str, color, bg);
 }
 
 void GFX_DrawStringCenterScaled(int16_t y, const char *str, uint16_t color, uint16_t bg, uint8_t scale)
@@ -78,7 +86,7 @@ void GFX_DrawStringCenterScaled(int16_t y, const char *str, uint16_t color, uint
     int16_t len = 0;
     const char *p = str;
     while (*p++) len++;
-    int16_t x = (LCD_WIDTH - len * FONT_STEP * scale) / 2;
+    int16_t x = (g_lcdWidth - len * FONT_STEP * scale) / 2;
     if (x < 0) x = 0;
     GFX_DrawStringScaled(x, y, str, color, bg, scale);
 }

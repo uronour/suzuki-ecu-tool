@@ -41,5 +41,21 @@ Thumbs.db
 .DS_Store
 Desktop.ini
 
+# Android
+android-app/.gradle/
+android-app/build/
+android-app/local.properties
+android-app/app/build/
+*.apk
+*.aab
+
+# Windows app
+win-app/bin/
+win-app/obj/
+
+# Emulator artifacts
+emulator/gauge_sim.exe
+emulator/*.dll
+
 # Keep the backup for reference but ignore by default
 # firmware/btt-custom/tft35_backup.bin

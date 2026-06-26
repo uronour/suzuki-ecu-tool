@@ -11,30 +11,28 @@ extern "C" {
 #define GAUGE_PAGE_COUNT 5
 
 typedef enum {
-  GAUGE_PAGE_DASHBOARD = 0,
-  GAUGE_PAGE_SENSORS,
-  GAUGE_PAGE_DTC,
+  GAUGE_PAGE_LIVE_DATA = 0,
+  GAUGE_PAGE_DIAGNOSTICS,
+  GAUGE_PAGE_ECU_TOOLS,
   GAUGE_PAGE_SETTINGS,
   GAUGE_PAGE_ABOUT,
 } GaugePage;
 
-typedef enum {
-  DASH_STYLE_OEM = 0,
-  DASH_STYLE_RACE,
-  DASH_STYLE_FLAT,
-  DASH_STYLE_NEO_RETRO,
-  DASH_STYLE_COUNT
-} DashStyle;
-
 void Gauge_Init(void);
-void Gauge_SetDashStyle(DashStyle style);
-DashStyle Gauge_GetDashStyle(void);
 void Gauge_Update(void);
 void Gauge_SetPage(GaugePage page);
 GaugePage Gauge_GetPage(void);
 void Gauge_NextPage(void);
 void Gauge_PrevPage(void);
 void Gauge_Press(void);
+void Gauge_LongPress(void);
+void Gauge_SetOrientation(uint8_t portrait);
+void Gauge_ToggleOrientation(void);
+uint8_t Gauge_IsSticky(void);
+void Gauge_SetSticky(uint8_t sticky);
+void Gauge_SelectUp(void);
+void Gauge_SelectDown(void);
+void Gauge_TouchAt(uint16_t x, uint16_t y);
 
 #ifdef __cplusplus
 }

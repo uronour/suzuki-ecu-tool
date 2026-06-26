@@ -1,6 +1,7 @@
 #include "encoder.h"
 #include "GPIO_Init.h"
 #include "os_timer.h"
+#include <stdio.h>
 
 #define ENC_A    PA8
 #define ENC_B    PC9
@@ -11,6 +12,7 @@ static int8_t g_dir = 0;
 static uint32_t g_lastEncTime = 0;
 static uint32_t g_lastBtnTime = 0;
 static uint8_t g_press = 0;
+static uint8_t g_lastBtnState = 1;
 
 static const int8_t encTable[16] = {
   0, 1, -1, 0,
@@ -27,6 +29,8 @@ void Encoder_Init(void)
   g_lastState = (GPIO_GetLevel(ENC_A) << 1) | GPIO_GetLevel(ENC_B);
   g_lastEncTime = OS_GetTimeMs();
   g_lastBtnTime = OS_GetTimeMs();
+  g_lastBtnState = GPIO_GetLevel(ENC_BTN);
+  printf("[ENC] Initialized: A=PA8, B=PC9, BTN=PC8\n");
 }
 
 int8_t Encoder_GetDir(void)
@@ -47,6 +51,7 @@ void Encoder_Poll(void)
 {
   uint32_t now = OS_GetTimeMs();
 
+  // Read encoder pins
   uint8_t a = GPIO_GetLevel(ENC_A);
   uint8_t b = GPIO_GetLevel(ENC_B);
   uint8_t state = (a << 1) | b;
@@ -55,18 +60,25 @@ void Encoder_Poll(void)
   {
     uint8_t idx = (g_lastState << 2) | state;
     int8_t delta = encTable[idx];
-    if (delta != 0 && (now - g_lastEncTime) > 2)
+    if (delta != 0)
     {
       g_dir += delta;
-      g_lastEncTime = now;
+      printf("[ENC] Dir delta: %d, accum: %d\n", delta, g_dir);
     }
+    g_lastEncTime = OS_GetTimeMs();
     g_lastState = state;
   }
 
+  // Button polling with debouncing
   uint8_t btn = GPIO_GetLevel(ENC_BTN);
-  if (btn == 0 && (now - g_lastBtnTime) > 50)
+  if (btn != g_lastBtnState)
   {
-    g_press = 1;
-    g_lastBtnTime = now;
+    if (btn == 0)  // Button pressed (active low)
+    {
+      printf("[ENC] Button pressed\n");
+      g_press = 1;
+    }
+    g_lastBtnTime = OS_GetTimeMs();
+    g_lastBtnState = btn;
   }
 }

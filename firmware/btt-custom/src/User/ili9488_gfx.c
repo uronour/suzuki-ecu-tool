@@ -7,6 +7,9 @@
 #include "variants.h"
 #include "font_8x13.h"
 
+uint16_t g_lcdWidth = LCD_WIDTH;
+uint16_t g_lcdHeight = LCD_HEIGHT;
+
 void LCD_Fill(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint16_t color)
 {
   uint32_t pixels = (uint32_t)(x1 - x0 + 1) * (y1 - y0 + 1);
@@ -64,6 +67,27 @@ void LCD_DrawProgressBar(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t
   uint16_t fillW = ((w - 2) * pct) / 100;
   if (fillW > 0)
     LCD_FillRect(x + 1, y + 1, x + 1 + fillW - 1, y + h - 2, barColor);
+}
+
+void LCD_FillCircle(uint16_t x0, uint16_t y0, uint16_t r, uint16_t color)
+{
+  int16_t x = r;
+  int16_t y = 0;
+  int16_t err = 0;
+  while (x >= y)
+  {
+    LCD_DrawHLine(x0 - x, x0 + x, y0 + y, color);
+    LCD_DrawHLine(x0 - x, x0 + x, y0 - y, color);
+    LCD_DrawHLine(x0 - y, x0 + y, y0 + x, color);
+    LCD_DrawHLine(x0 - y, x0 + y, y0 - x, color);
+    y++;
+    err += 1 + 2 * y;
+    if (2 * (err - x) + 1 > 0)
+    {
+      x--;
+      err += 1 - 2 * x;
+    }
+  }
 }
 
 void LCD_Backlight_On(void)
@@ -133,7 +157,7 @@ void GFX_DrawStringCenter(int16_t y, const char *str, uint16_t color, uint16_t b
   int16_t len = 0;
   const char *p = str;
   while (*p++) len++;
-  int16_t x = (LCD_WIDTH - len * FONT_STEP) / 2;
+  int16_t x = (g_lcdWidth - len * FONT_STEP) / 2;
   if (x < 0) x = 0;
   GFX_DrawString(x, y, str, color, bg);
 }
@@ -143,7 +167,7 @@ void GFX_DrawStringCenterScaled(int16_t y, const char *str, uint16_t color, uint
   int16_t len = 0;
   const char *p = str;
   while (*p++) len++;
-  int16_t x = (LCD_WIDTH - len * FONT_STEP * scale) / 2;
+  int16_t x = (g_lcdWidth - len * FONT_STEP * scale) / 2;
   if (x < 0) x = 0;
   GFX_DrawStringScaled(x, y, str, color, bg, scale);
 }

@@ -57,6 +57,11 @@ uint32_t SDL_GFX_GetStartTime(void)
     return g_startTime;
 }
 
+void SDL_GFX_SetWindowTitle(const char *title)
+{
+    if (g_window) SDL_SetWindowTitle(g_window, title);
+}
+
 void SDL_GFX_Quit(void)
 {
     if (g_framebuffer) free(g_framebuffer);

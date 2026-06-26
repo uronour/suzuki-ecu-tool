@@ -80,3 +80,15 @@ bool SD_Log_IsMounted(void)
 {
   return g_mounted;
 }
+
+bool SD_Log_SaveBin(const char *filename, const uint8_t *data, uint32_t len)
+{
+  if (!g_mounted || !data || len == 0) return false;
+  FIL file;
+  if (f_open(&file, filename, FA_WRITE | FA_CREATE_ALWAYS) != FR_OK)
+    return false;
+  unsigned bytesWritten;
+  FRESULT res = f_write(&file, data, len, &bytesWritten);
+  f_close(&file);
+  return (res == FR_OK && bytesWritten == len);
+}
