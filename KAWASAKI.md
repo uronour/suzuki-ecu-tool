@@ -1,54 +1,37 @@
-# Kawasaki KDS Protocol Support
+# Kawasaki KDS Support (2004 ZX-10R)
 
-Same hardware, different protocol configuration.
+The Suzuki ECU Tool hardware is fully compatible with the Kawasaki Diagnostic System (KDS) protocol used in early EFI Kawasaki motorcycles.
 
-## Differences from Suzuki SDS
+## Protocol Comparison
 
 | Parameter | Suzuki SDS | Kawasaki KDS |
 |-----------|-----------|--------------|
-| ECU Address | 0x12 | 0x11 |
-| Protocol Base | KWP2000 (ISO 14230) | KWP2000 (ISO 14230) |
+| ECU Address | `0x12` | `0x11` |
+| Tester Address | `0xF1` | `0xF1` |
+| Initialization | Fast Init (`0x81`) | Fast Init (`0x81`) + Start Diag Session (`0x10 0x80`) |
 | Baud Rate | 10,400 | 10,400 |
-| Init Sequence | fast init (0x81) | fast init (0x81) + diagnostic session (0x10 0x80) |
-| Physical Layer | K-Line (ISO 9141-2) | K-Line (ISO 9141-2) |
-| Hardware | Identical | Identical |
 
-## KDS Specific PIDs
+## Connection Pinout (ZX-10R 2004)
 
-The KWP2000 library has these KDS-specific PIDs:
-- `kawasaki_request_gps` — Gear position (0x21, 0x0B)
-- `kawasaki_request_rpm` — RPM (0x21, 0x09)
-- `kawasaki_request_speed` — Speed (0x21, 0x0C)
-- `kawasaki_request_tps` — Throttle position (0x21, 0x04)
-- `kawasaki_request_iap` — Intake pressure (0x21, 0x07)
-- `kawasaki_request_iat` — Intake temp (0x21, 0x05)
-- `kawasaki_request_ect` — Coolant temp (0x21, 0x06)
+Use the **RS232 Header** on the BTT TFT35 V3.0:
 
-## Kawasaki Diagnostic Connector
+1. **K-Line**: Pin 1 on the bike's diagnostic plug -> K-Line Driver -> **`PA3` (RX)** and **`PA2` (TX)**.
+2. **Ground**: Ground pin on bike -> System Ground.
+3. **Power**: +12V from bike -> Voltage Regulator -> System 5V/3.3V.
 
-Most Kawasaki fuel-injected models (2004+) use a **6-pin connector** similar to Suzuki but with different pinout.
+## How to use KDS Mode
 
-Typical Kawasaki 6-pin diagnostic connector:
-```
-Pin 1: K-Line
-Pin 2: +12V
-Pin 3: Ground  
-Pin 4: Not used
-Pin 5: Not used
-Pin 6: Not used
-```
+1. Power on the Suzuki ECU Tool.
+2. Open the **Android App**.
+3. Go to **Settings**.
+4. Change **Bike Brand** to **KAWASAKI**.
+5. Tap **Connect**.
+6. The STM32 will switch to KDS mode and start the initialization sequence for the Kawasaki ECU.
 
-## Using with This Hardware
+## KDS Supported PIDs
 
-1. Build the same hardware (Arduino + L9637D)
-2. In firmware, change `brand` to `KAWASAKI`
-3. Note: Kawasaki doesn't need the dealer mode optocoupler
-4. The KWP2000 library handles all KDS protocol differences automatically
-
-## Tested Kawasaki Models
-
-The library has been tested on:
-- Kawasaki ZX-6R (636)
-- Various Kawasaki models 2005-2015
-
-(Verify your specific model on the KWP2000 GitHub issues page.)
+- **RPM**: `0x21 0x09`
+- **Speed**: `0x21 0x0C`
+- **TPS**: `0x21 0x04`
+- **Engine Temp**: `0x21 0x06`
+- **Gear Pos**: `0x21 0x0B`
